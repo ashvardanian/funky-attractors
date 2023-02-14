@@ -56,6 +56,16 @@ def de_jong_step(
 
 
 @jit(nopython=True)
+def svensson_step(
+    x: float, y: float, a: float, b: float, c: float, d: float, *args
+) -> Tuple[float]:
+    return (
+        d * sin(a * x) - sin(b * y),
+        c * cos(a * x) + cos(b * y),
+    )
+
+
+@jit(nopython=True)
 def ikeda_step(
     x: float, y: float, a: float, b: float, c: float, d: float, *args
 ) -> Tuple[float]:
@@ -103,8 +113,16 @@ class Attractors(Enum):
         "clifford", clifford_step, 2, {"a": 1.5, "b": -1.8, "c": 1.6, "d": 2}
     )
     DE_JONG = Attractor(
-        "de_jong", de_jong_step, 2, {"a": -0.709, "b": 1.638, "c": 0.452, "d": 1.740}
+        "de_jong", de_jong_step, 2, {"a": -0.709,
+                                     "b": 1.638, "c": 0.452, "d": 1.740}
     )
-    IKEDA = Attractor("ikeda", ikeda_step, 2, {"a": 0.4, "b": 0.9, "c": 6, "d": 1})
-    LORENZ = Attractor("lorenz", lorenz_step, 3, {"a": 10, "b": 28, "c": 8 / 3})
-    ROSSLER = Attractor("rossler", rossler_step, 3, {"a": 0.1, "b": 0.1, "c": 14})
+    SVENSSON = Attractor(
+        "svensson", svensson_step, 2, {
+            "a": 1.4, "b": 1.56, "c": 1.4, "d": -6.56}
+    )
+    IKEDA = Attractor("ikeda", ikeda_step, 2, {
+                      "a": 0.4, "b": 0.9, "c": 6, "d": 1})
+    LORENZ = Attractor("lorenz", lorenz_step, 3, {
+                       "a": 10, "b": 28, "c": 8 / 3})
+    ROSSLER = Attractor("rossler", rossler_step, 3, {
+                        "a": 0.1, "b": 0.1, "c": 14})
